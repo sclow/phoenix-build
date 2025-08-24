@@ -293,7 +293,8 @@ https://minimal3dp.com/klipper-calibration
 
 Ensure latest Katapult:
 
-```test -e ~/katapult && (cd ~/katapult && git pull) || (cd ~ && git clone https://github.com/Arksine/katapult) ; cd ~
+```
+test -e ~/katapult && (cd ~/katapult && git pull) || (cd ~ && git clone https://github.com/Arksine/katapult) ; cd ~
 ```
 
 ### Update Klipper
