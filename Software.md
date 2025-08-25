@@ -32,6 +32,18 @@ sudo apt update
 sudo apt upgrade
 ```
 
+## Disable IPv6
+Local issues with IPv6 make it much easier just to disable it on Pheonix;
+
+edit /etc/sysctl.conf and add the following lines
+
+```
+net.ipv6.conf.all.disable_ipv6 = 1
+#net.ipv6.conf.default.disable_ipv6 = 1
+#net.ipv6.conf.lo.disable_ipv6 = 1
+```
+
+Note: disabling "all" seems to do the trick, more specific seems to cause issues with CANBus comms.
 
 ## Install Klipper
 ```
