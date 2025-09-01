@@ -195,6 +195,71 @@ https://www.reddit.com/r/voroncorexy/comments/nv30eb/til_its_possible_to_upload_
 https://github.com/Arksine/moonraker/blob/master/docs/configuration.md#octoprint_compat
 
 
+
+### Allow Temperature monitoring of MCU and Pi
+Add the following to printer.cfg
+
+```
+[temperature_sensor MCU]
+sensor_type: temperature_mcu
+
+[temperature_sensor raspberry_pi]
+sensor_type: temperature_host
+```
+
+### Enable Firmware Retraction
+Add the following to printer.cfg
+
+```
+[firmware_retraction]
+retract_length: 0.5
+# The length of filament (in mm) to retract when G10 is activated,
+# and to unretract when G11 is activated (but see
+# unretract_extra_length below). The default is 0 mm.
+retract_speed: 25
+# The speed of retraction, in mm/s. The default is 20 mm/s.
+unretract_extra_length: 0
+# The length (in mm) of *additional* filament to add when
+# unretracting.
+unretract_speed: 10
+# The speed of unretraction, in mm/s. The default is 10 mm/s.
+```
+
+### Define Macro to brush nozzle
+Add the following to printer.cfg
+
+```
+[gcode_macro BRUSH_NOZZLE]
+# heat nozzle for best results
+variable_x1: 242 # middle of brush   <<<edit this value>>>
+variable_y1: 34 # base of brush   <<<edit this value>>>
+variable_y2: 45 # end of brush    <<<edit this value>>>
+variable_z1: 5 # nozzle height   <<<edit this value>>>
+gcode:
+    M400  ;wait for buffer to clear
+    {% if "xyz" not in printer.toolhead.homed_axes %}
+        G28         ;home axes before travel moves
+    {% endif %}
+
+    G90
+    #G0 Z5 F3600     ;ensure nozzle is above endstop pin
+    G0 X{x1} Y{y1}  ;start position
+    #G0 Z{z1}        ;move down, ready for brushing
+    
+    M117 Brushing Nozzle
+    G0 Y{y2} F5000  ;move forward
+    G0 Y{y1}        ;move back
+    G0 Y{y2}        ;move forward
+    G0 Y{y1}        ;move back
+    G0 Y{y2}        ;move forward
+    G0 Y{y1}        ;move back
+    G0 Y{y2}        ;move forward
+    G0 Y{y1}        ;move back
+    G0 Z10 F3600     ;raise nozzle when done
+    G0 X220 Y220  ;start position
+    M117 Nozzle Cleaned
+```
+
 ## Reboot to activate new components
 ```sudo reboot```
 
